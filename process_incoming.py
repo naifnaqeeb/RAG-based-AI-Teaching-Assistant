@@ -1,8 +1,13 @@
+import os
+from dotenv import load_dotenv
 import requests
 import pandas as pd
 import numpy as np
 import joblib
 from sklearn.metrics.pairwise import cosine_similarity
+
+load_dotenv()
+GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
 
 def create_embedding(text_list):
     r = requests.post("http://localhost:11434/api/embed",json={
@@ -23,6 +28,23 @@ def inference(prompt):
     response = r.json()
     print(response)
     return response
+
+def inference_gemini(prompt):
+    print("Thinking....")
+    url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key={GEMINI_API_KEY}"
+
+    payload = {
+        "contents": [
+            {"parts": [{"text": prompt}]}
+        ]
+    }
+
+    r = requests.post(url, json=payload)
+    r.raise_for_status()
+
+    return r.json()["candidates"][0]["content"]["parts"][0]["text"]
+
+
 
 df = joblib.load('embeddings.joblib')
 
@@ -49,7 +71,10 @@ User asked this question related to the video chunks, you have to answer in a hu
 with open("prompt.txt",'w') as f:
     f.write(prompt)
 
-response = inference(prompt)["response"]
+# response = inference(prompt)["response"]
+# print(response)
+
+response = inference_gemini(prompt)
 print(response)
 
 with open("response.txt",'w') as f:
