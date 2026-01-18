@@ -1,0 +1,35 @@
+# Ignore all audio files
+audios/*
+!audios/.gitkeep
+
+# Ignore all video files
+videos/*
+!videos/.gitkeep
+
+# Ignore all json chunk outputs
+jsons/*
+!jsons/.gitkeep
+
+# Ignore unused folder contents
+unused/*
+!unused/.gitkeep
+
+# Ignore large / generated files
+*.mp3
+*.mp4
+*.wav
+*.json
+*.joblib
+
+# Ignore specific outputs
+embeddings.joblib
+output.json
+output1.json
+response.txt
+
+# Ignore OS / Python junk
+__pycache__/
+*.pyc
+.env
+.DS_Store
+Thumbs.db
